@@ -2,11 +2,11 @@
   Which eight bus stops have the smallest population above 500 people inside of Philadelphia
   within 800 meters of the stop (Philadelphia county block groups have a geoid prefix of 42101)?
   Answer:
-	"Delaware Av & Venango St"
-	"Delaware Av & Tioga St"
+	"Delaware Av & Tioga St"    
 	"Delaware Av & Castor Av"
-	"Northwestern Av & Stenton Av"
+	"Delaware Av & Venango St"
 	"Stenton Av & Northwestern Av"
+	"Northwestern Av & Stenton Av"
 	"Bethlehem Pk & Chesney Ln"
 	"Bethlehem Pk & Chesney Ln"
 	"Delaware Av & Wheatsheaf Ln"
@@ -40,5 +40,7 @@ select
     stops.geog
 from septa_bus_stop_surrounding_population as pop
 inner join septa.bus_stops as stops using (stop_id)
-order by pop.estimated_pop_800m asc
-limit 8 
+order by pop.estimated_pop_800m asc, stops.geog asc
+limit 8
+
+

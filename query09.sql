@@ -12,5 +12,5 @@ select
 from census.blockgroups_2020 as bg
 inner join phl.pwd_parcels as p
     on st_contains(bg.geog::geometry, p.geog::geometry)
-where p.address ILIKE '%220-30 S 34TH ST%'
-limit 1 
+where p.address ilike '%220-30 S 34TH ST%'
+limit 1

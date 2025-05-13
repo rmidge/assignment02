@@ -42,5 +42,3 @@ from septa_bus_stop_surrounding_population as pop
 inner join septa.bus_stops as stops using (stop_id)
 order by pop.estimated_pop_800m asc, stops.geog asc
 limit 8
-
-

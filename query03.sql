@@ -20,17 +20,17 @@ parcel_bus_stop_distances as (
     from phl.pwd_parcels as p
     cross join lateral (
         select
-            stop_name,
-            geog
-        from septa.bus_stops
-        order by p.geog <-> geog
+            bs.stop_name,
+            bs.geog
+        from septa.bus_stops as bs
+        order by p.geog <-> bs.geog
         limit 1
     ) as s
 )
 
 select
-    parcel_address,
-    stop_name,
-    round(distance::numeric, 2) as distance
-from parcel_bus_stop_distances
-order by distance desc 
+    pbs.parcel_address,
+    pbs.stop_name,
+    round(pbs.distance::numeric, 2) as distance
+from parcel_bus_stop_distances as pbs
+order by pbs.distance desc

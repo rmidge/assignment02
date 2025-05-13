@@ -5,7 +5,9 @@
 */
 
 with penn_campus as (
-    select st_union(geog::geometry)::geography as geog from upenn_extent
+    select 
+        st_union(geog::geometry)::geography as geog 
+    from upenn_extent
 )
 
 select

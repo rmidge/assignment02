@@ -12,7 +12,8 @@ shape_geoms as (
         shape_id,
         st_makeline(
             st_makepoint(shape_pt_lon, shape_pt_lat)
-            order by shape_pt_sequence
+            order by
+                shape_pt_sequence
         )::geography as shape_geog
     from septa.bus_shapes
     group by shape_id
@@ -48,4 +49,4 @@ select
 from ranked_trips
 where rn = 1
 order by shape_length desc
-limit 2 
+limit 2

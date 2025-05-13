@@ -22,11 +22,11 @@ neighborhood_bus_stops as (
 select
     neighborhood_name,
     total_stops,
+    accessible_stops as num_bus_stops_accessible,
+    (total_stops - accessible_stops) as num_bus_stops_inaccessible,
     case
         when total_stops = 0 then 0
         else (accessible_stops::float / total_stops) * 100
-    end as accessibility_percent,
-    accessible_stops as num_bus_stops_accessible,
-    (total_stops - accessible_stops) as num_bus_stops_inaccessible
+    end as accessibility_percent
 from neighborhood_bus_stops
 order by total_stops desc, accessibility_percent desc

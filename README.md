@@ -163,14 +163,14 @@ There are several datasets that are prescribed for you to use in this part. Belo
 2.  Which **eight** bus stops have the smallest population above 500 people _inside of Philadelphia_ within 800 meters of the stop (Philadelphia county block groups have a geoid prefix of `42101` -- that's `42` for the state of PA, and `101` for Philadelphia county)?
 
     Answer:
-	"Delaware Av & Tioga St"    
-	"Delaware Av & Castor Av"
-	"Delaware Av & Venango St"
-	"Stenton Av & Northwestern Av"
-	"Northwestern Av & Stenton Av"
-	"Bethlehem Pk & Chesney Ln"
-	"Bethlehem Pk & Chesney Ln"
-	"Delaware Av & Wheatsheaf Ln"
+	"Delaware Av & Tioga St"
+    "Delaware Av & Castor Av"
+    "Delaware Av & Venango St"
+    "Stenton Av & Northwestern Av"
+    "Northwestern Av & Stenton Av"
+    "Bethlehem Pk & Chesney Ln"
+    "Bethlehem Pk & Chesney Ln"
+    "Delaware Av & Wheatsheaf Ln"
 
 3.  Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters, rounded to two decimals. Order by distance (largest on top).
 

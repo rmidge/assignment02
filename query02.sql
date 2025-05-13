@@ -2,14 +2,14 @@
   Which eight bus stops have the smallest population above 500 people inside of Philadelphia
   within 800 meters of the stop (Philadelphia county block groups have a geoid prefix of 42101)?
   Answer:
-	"Delaware Av & Tioga St"    
-	"Delaware Av & Castor Av"
-	"Delaware Av & Venango St"
-	"Stenton Av & Northwestern Av"
-	"Northwestern Av & Stenton Av"
-	"Bethlehem Pk & Chesney Ln"
-	"Bethlehem Pk & Chesney Ln"
-	"Delaware Av & Wheatsheaf Ln"
+	"Delaware Av & Tioga St"
+    "Delaware Av & Castor Av"
+    "Delaware Av & Venango St"
+    "Stenton Av & Northwestern Av"
+    "Northwestern Av & Stenton Av"
+    "Bethlehem Pk & Chesney Ln"
+    "Bethlehem Pk & Chesney Ln"
+    "Delaware Av & Wheatsheaf Ln"
 */
 
 with
@@ -20,7 +20,7 @@ septa_bus_stop_blockgroups as (
         '1500000US' || bg.geoid as geoid
     from septa.bus_stops as stops
     inner join census.blockgroups_2020 as bg
-        on st_dwithin(stops.geog, bg.geog, 800)
+        on public.st_dwithin(stops.geog, bg.geog, 800)
     where bg.geoid like '42101%'
 ),
 

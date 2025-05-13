@@ -66,8 +66,7 @@ There are several datasets that are prescribed for you to use in this part. Belo
             direction_id TEXT,
             block_id TEXT,
             shape_id TEXT,
-            wheelchair_accessible INTEGER,
-            bikes_allowed INTEGER
+            wheelchair_accessible INTEGER
         );
         ```
 *   `septa.bus_shapes` ([SEPTA GTFS](https://github.com/septadev/GTFS/releases))
@@ -158,97 +157,74 @@ There are several datasets that are prescribed for you to use in this part. Belo
 ## Questions
 
 1.  Which **eight** bus stop have the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
+   
+   Lombard St & 18th St
 
 2.  Which **eight** bus stops have the smallest population above 500 people _inside of Philadelphia_ within 800 meters of the stop (Philadelphia county block groups have a geoid prefix of `42101` -- that's `42` for the state of PA, and `101` for Philadelphia county)?
 
-    **The queries to #1 & #2 should generate results with a single row, with the following structure:**
-
-    ```sql
-    (
-        stop_name text, -- The name of the station
-        estimated_pop_800m integer, -- The population within 800 meters
-        geog geography -- The geography of the bus stop
-    )
-    ```
+    Answer:
+	"Delaware Av & Venango St"
+	"Delaware Av & Tioga St"
+	"Delaware Av & Castor Av"
+	"Northwestern Av & Stenton Av"
+	"Stenton Av & Northwestern Av"
+	"Bethlehem Pk & Chesney Ln"
+	"Bethlehem Pk & Chesney Ln"
+	"Delaware Av & Wheatsheaf Ln"
 
 3.  Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters, rounded to two decimals. Order by distance (largest on top).
 
-    _Your query should run in under two minutes._
-
-    >_**HINT**: This is a [nearest neighbor](https://postgis.net/workshops/postgis-intro/knn.html) problem.
-
-    **Structure:**
-    ```sql
-    (
-        parcel_address text,  -- The address of the parcel
-        stop_name text,  -- The name of the bus stop
-        distance numeric  -- The distance apart in meters, rounded to two decimals
-    )
-    ```
+    First 5 rows;
+	"170 SPRING LN"	"Ridge Av & Ivins Rd"	1658.82
+	"150 SPRING LN"	"Ridge Av & Ivins Rd"	1620.32
+	"130 SPRING LN"	"Ridge Av & Ivins Rd"	1611.02
+	"190 SPRING LN"	"Ridge Av & Ivins Rd"	1490.10
+	"630 SAINT ANDREW RD"	"Germantown Av & Springfield Av "	1418.42 
 
 4.  Using the `bus_shapes`, `bus_routes`, and `bus_trips` tables from GTFS bus feed, find the **two** routes with the longest trips.
 
-    _Your query should run in under two minutes._
-
-    >_**HINT**: The `ST_MakeLine` function is useful here. You can see an example of how you could use it at [this MobilityData walkthrough](https://docs.mobilitydb.com/MobilityDB-workshop/master/ch04.html#:~:text=INSERT%20INTO%20shape_geoms) on using GTFS data. If you find other good examples, please share them in Slack._
-
-    >_**HINT**: Use the query planner (`EXPLAIN`) to see if there might be opportunities to speed up your query with indexes. For reference, I got this query to run in about 15 seconds._
-
-    >_**HINT**: The `row_number` window function could also be useful here. You can read more about window functions [in the PostgreSQL documentation](https://www.postgresql.org/docs/9.1/tutorial-window.html). That documentation page uses the `rank` function, which is very similar to `row_number`. For more info about window functions you can check out:_
-    >*   📑 [_An Easy Guide to Advanced SQL Window Functions_](https://towardsdatascience.com/a-guide-to-advanced-sql-window-functions-f63f2642cbf9) in Towards Data Science, by Julia Kho
-    >*   🎥 [_SQL Window Functions for Data Scientists_](https://www.youtube.com/watch?v=e-EL-6Vnkbg) (and a [follow up](https://www.youtube.com/watch?v=W_NBnkLLh7M) with examples) on YouTube, by Emma Ding
-
-    **Structure:**
-    ```sql
-    (
-        route_short_name text,  -- The short name of the route
-        trip_headsign text,  -- Headsign of the trip
-        shape_geog geography,  -- The shape of the trip
-        shape_length numeric  -- Length of the trip in meters, rounded to the nearest whole number
-    )
-    ```
+    Answer: 
+    "130"	"Bucks County Community College"
+    "128"	"Oxford Valley Mall"
 
 5.  Rate neighborhoods by their bus stop accessibility for wheelchairs. Use OpenDataPhilly's neighborhood dataset along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods.
 
-    _NOTE: There is no automated test for this question, as there's no one right answer. With urban data analysis, this is frequently the case._
 
     Discuss your accessibility metric and how you arrived at it below:
 
     **Description:**
+   My accessibility metric combines both the total number of bus stops in each neighborhood (transit coverage) and the percentage of those stops that are wheelchair accessible (wheelchair_boarding = 1). This approach highlights neighborhoods that not only have a high proportion of accessible stops, but also a high absolute number of stops, reflecting both the quality and quantity of accessible transit infrastructure.   
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
+    Answer:
+    "OVERBROOK"
+    "OLNEY"
+    "SOMERTON"	
+    "BUSTLETON"
+    "LOGAN"
+
 
 7.  What are the _bottom five_ neighborhoods according to your accessibility metric?
-
-    **Both #6 and #7 should have the structure:**
-    ```sql
-    (
-      neighborhood_name text,  -- The name of the neighborhood
-      accessibility_metric ...,  -- Your accessibility metric value
-      num_bus_stops_accessible integer,
-      num_bus_stops_inaccessible integer
-    )
-    ```
+    Answer:
+    "BARTRAM_VILLAGE"
+    "MECHANICSVILLE"
+    "WOODLAND_TERRACE"
+    "SOUTHWEST_SCHUYLKILL"
+    "PASCHALL"
+  
 
 8.  With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
-    **Structure (should be a single value):**
-    ```sql
-    (
-        count_block_groups integer
-    )
-    ```
+   
+  Answer: 17
 
     **Discussion:**
+     To define the spatial extent of Penn’s main campus, I used a GeoJSON file representing a buffered zone around the campus, which closely aligns with the official Penn Patrol Zone. According to the University of Pennsylvania Division of Public Safety, the Penn Patrol Zone covers the area from 30th Street to 43rd Street (east to west) and from Market Street to Baltimore Avenue (north to south). This area represents the primary jurisdiction for campus police and is widely recognized as the core of Penn’s campus for operational and safety purposes.
 
-9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
+9.  With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
+    
+    Answer: "421010369022"
 
-    **Structure (should be a single value):**
-    ```sql
-    (
-        geo_id text
-    )
-    ```
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. SQL's `CASE` statements may be helpful for some operations.
 

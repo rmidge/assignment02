@@ -36,7 +36,11 @@ ranked_trips as (
         t.trip_headsign,
         t.shape_geog,
         t.shape_length,
-        row_number() over (partition by r.route_id order by t.shape_length desc) as rn
+        row_number() over (
+            partition by r.route_id 
+            order by 
+                t.shape_length desc
+        ) as rn
     from trip_lengths as t
     inner join septa.bus_routes as r using (route_id)
 )

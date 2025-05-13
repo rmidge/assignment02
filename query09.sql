@@ -8,7 +8,8 @@
 */
 
 select
-    bg.geoid as geo_id
+    bg.geoid as 
+        geo_id
 from census.blockgroups_2020 as bg
 inner join phl.pwd_parcels as p
     on st_contains(bg.geog::geometry, p.geog::geometry)
